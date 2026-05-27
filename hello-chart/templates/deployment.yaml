@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-hello
@@ -15,9 +15,32 @@ spec:
       labels:
         app: {{ .Release.Name }}-hello
     spec:
+      initContainers:
+        - name: liquibase-migrations
+          image: liquibase/liquibase:4.25
+          args:
+            - "--url={{ .Values.liquibase.url }}"
+            - "--username={{ .Values.liquibase.username }}"
+            - "--password=$(DB_PASSWORD)"
+            - "--searchPath=/liquibase/changelog"
+            - "--changeLogFile=db.changelog-master.xml"
+            - "update"
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-db-secret
+                  key: password
+          volumeMounts:
+            - name: changelog-volume
+              mountPath: /liquibase/changelog
       containers:
         - name: hello
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.containerPort }}
+      volumes:
+        - name: changelog-volume
+          configMap:
+            name: {{ .Release.Name }}-liquibase-changelog

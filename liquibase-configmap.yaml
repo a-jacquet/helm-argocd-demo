@@ -1,0 +1,46 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hello-release-liquibase-changelog
+  namespace: demo
+data:
+  db.changelog-master.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+        <changeSet id="001" author="a-jacquet">
+            <createTable tableName="users">
+                <column name="id" type="BIGSERIAL">
+                    <constraints primaryKey="true" nullable="false"/>
+                </column>
+                <column name="username" type="VARCHAR(100)">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="email" type="VARCHAR(255)">
+                    <constraints nullable="false" unique="true"/>
+                </column>
+                <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                    <constraints nullable="false"/>
+                </column>
+            </createTable>
+        </changeSet>
+
+        <changeSet id="002" author="a-jacquet">
+            <addColumn tableName="users">
+                <column name="role" type="VARCHAR(50)" defaultValue="USER">
+                    <constraints nullable="false"/>
+                </column>
+            </addColumn>
+        </changeSet>
+
+        <changeSet id="003" author="a-jacquet">
+            <addColumn tableName="users">
+                <column name="last_login" type="TIMESTAMP"/>
+            </addColumn>
+        </changeSet>
+
+    </databaseChangeLog>
