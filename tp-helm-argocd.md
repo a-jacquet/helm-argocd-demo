@@ -300,7 +300,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/TON_USERNAME/helm-argocd-demo.git
+    repoURL: https://github.com/a-jacquet/helm-argocd-demo.git
     targetRevision: HEAD
     path: hello-chart
   destination:

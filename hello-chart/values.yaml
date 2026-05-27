@@ -14,3 +14,4 @@ containerPort: 80
 liquibase:
   url: jdbc:postgresql://postgres-postgresql.demo.svc.cluster.local:5432/demodb
   username: demo
+  password: demo123
