@@ -40,7 +40,18 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.containerPort }}
+          env:
+            - name: SPRING_DATA_REDIS_HOST
+              value: "{{ .Values.redis.host }}"
+            - name: SPRING_DATA_REDIS_PORT
+              value: {{ .Values.redis.port | quote }}
+            - name: SPRING_DATA_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-redis-secret
+                  key: password
       volumes:
         - name: changelog-volume
           configMap:
             name: {{ .Release.Name }}-liquibase-changelog
+            

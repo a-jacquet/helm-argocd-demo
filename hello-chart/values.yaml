@@ -15,3 +15,8 @@ liquibase:
   url: jdbc:postgresql://postgres-postgresql.demo.svc.cluster.local:5432/demodb
   username: demo
   password: demo123
+
+redis:
+  host: redis-master.demo.svc.cluster.local
+  port: 6379
+  password: redis123
