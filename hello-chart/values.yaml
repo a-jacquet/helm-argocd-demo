@@ -20,3 +20,7 @@ redis:
   host: redis-master.demo.svc.cluster.local
   port: 6379
   password: redis123
+
+logstash:
+  host: host.docker.internal
+  port: 5044

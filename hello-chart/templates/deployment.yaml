@@ -50,6 +50,10 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-redis-secret
                   key: password
+            - name: LOGSTASH_HOST
+              value: "{{ .Values.logstash.host }}"
+            - name: LOGSTASH_PORT
+              value: {{ .Values.logstash.port | quote }}
       volumes:
         - name: changelog-volume
           configMap:

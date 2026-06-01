@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-config
+  namespace: logging
+data:
+  filebeat.yml: |
+    filebeat.autodiscover:
+      providers:
+        - type: kubernetes
+          node: ${NODE_NAME}
+          hints.enabled: true
+          templates:
+            - condition:
+                equals:
+                  kubernetes.namespace: demo
+              config:
+                - type: container
+                  paths:
+                    - /var/log/containers/*${data.kubernetes.container.id}.log
+                  processors:
+                    - add_kubernetes_metadata:
+                        host: ${NODE_NAME}
+
+    output.logstash:
+      hosts: ["host.docker.internal:5044"]
